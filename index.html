@@ -110,18 +110,18 @@
                 <input type="text" id="klasse" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <div>
-                <label for="email" class="block text-gray-700 font-medium">E-Mail:</label>
+                <label for="email" class="block text-gray-700 font-medium">E-Mail<span class="text-red-500">*</span>:</label>
                 <input type="email" id="email" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <div>
                 <label for="phone" class="block text-gray-700 font-medium">Telefonnummer:</label>
                 <input type="tel" id="phone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
             </div>
-            <p class="text-sm text-gray-600">Mindestens eine Kontaktmöglichkeit (E-Mail oder Telefonnummer) ist erforderlich.</p>
+            <p class="text-sm text-gray-600">Mindestens Name, Name des Kindes, die Klasse und die Email sind erforderlich für eine Bestellung.</p>
         </form>
 
         <!-- Bestellung abschließen -->
-        <div class="mt-6">
+        <div class="mt-6 hidden">
             <button id="finalizeOrder" class="w-full py-2 px-4 bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Bestellung abschließen</button>
         </div>
 
