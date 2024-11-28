@@ -180,6 +180,50 @@ function finalizeOrder() {
     });
 }
 
+// Bestellung per E-Mail senden
+function sendEmail() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (!name || (!email && !phone)) {
+        alert("Bitte füllen Sie alle notwendigen Felder aus.");
+        return;
+    }
+
+    if (cartItems.length === 0) {
+        alert("Ihr Warenkorb ist leer.");
+        return;
+    }
+
+    // Betreff und Empfänger
+    const to = "elternbeirat@foersterfrank.de";
+    const subject = encodeURIComponent("Neue Bestellung");
+    const cc = email ? `?cc=${encodeURIComponent(email)}` : "";
+
+    // Nachrichtentext
+    let body = `Neue Bestellung von ${name}:\n\n`;
+
+    if (email) body += `E-Mail: ${email}\n`;
+    if (phone) body += `Telefon: ${phone}\n\n`;
+
+    body += "Warenkorb:\n";
+    cartItems.forEach((item, index) => {
+        body += `${index + 1}. ${item.product} (${item.options}) - ${item.quantity} Stück - ${item.price.toFixed(2)} €\n`;
+    });
+    body += `\nGesamtkosten: ${totalPrice.toFixed(2)} €\n\nVielen Dank für Ihre Bestellung!`;
+
+    // mailto-Link generieren
+    const mailtoLink = `mailto:${to}${cc}&subject=${subject}&body=${encodeURIComponent(body)}`;
+
+    // Link öffnen
+    window.location.href = mailtoLink;
+}
+
+// Event-Listener hinzufügen
+document.getElementById("sendEmail").addEventListener("click", sendEmail);
+
+
 // Event-Listener
 productType.addEventListener("change", updateProductDetails);
 addToCartButton.addEventListener("click", addToCart);
