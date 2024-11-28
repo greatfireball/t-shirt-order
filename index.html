@@ -9,6 +9,7 @@
 <body class="bg-gray-100 font-sans antialiased">
     <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
         <h1 class="text-2xl font-bold mb-4 text-gray-800">Bestellformular</h1>
+        
         <form id="orderForm" class="space-y-4">
             <!-- Produkt -->
             <div>
@@ -20,15 +21,30 @@
                 </select>
             </div>
 
-            <!-- Farbe & Größe -->
+            <!-- Produktfoto -->
+            <div class="flex justify-center">
+                <img id="productImage" src="" alt="Produktbild" class="w-48 h-48 object-contain mt-4 hidden">
+            </div>
+
+            <!-- Preis -->
+            <div class="text-gray-700 font-semibold">
+                <p>Grundpreis: <span id="basePrice">15.00</span> €</p>
+                <p id="priceDetails" class="text-sm text-gray-600">Preisänderungen basieren auf gewählten Optionen.</p>
+            </div>
+
+            <!-- Farbe & Größe / Name -->
             <div id="colorSizeSelection" class="grid grid-cols-2 gap-4">
                 <div>
                     <label for="color" class="block text-gray-700 font-medium">Farbe:</label>
                     <select id="color" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
                 </div>
-                <div>
+                <div id="sizeSection">
                     <label for="size" class="block text-gray-700 font-medium">Größe:</label>
                     <select id="size" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
+                </div>
+                <div id="nameSection" class="hidden">
+                    <label for="nameInput" class="block text-gray-700 font-medium">Name für die Mütze:</label>
+                    <input type="text" id="nameInput" placeholder="Name eingeben" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>
 
@@ -47,8 +63,7 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Produkt</th>
-                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Farbe</th>
-                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Größe</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Optionen</th>
                     <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Menge</th>
                     <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Preis</th>
                     <th class="border border-gray-300 px-4 py-2 text-center text-gray-600">Aktion</th>
@@ -59,6 +74,24 @@
             </tbody>
         </table>
         <p class="mt-2 text-right text-gray-800 font-medium">Gesamt: <span id="totalPrice">0.00</span> €</p>
+
+        <!-- Kontaktinformationen -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-800">Ihre Daten</h2>
+        <form id="contactForm" class="space-y-4">
+            <div>
+                <label for="name" class="block text-gray-700 font-medium">Name <span class="text-red-500">*</span>:</label>
+                <input type="text" id="name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label for="email" class="block text-gray-700 font-medium">E-Mail:</label>
+                <input type="email" id="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label for="phone" class="block text-gray-700 font-medium">Telefonnummer:</label>
+                <input type="tel" id="phone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <p class="text-sm text-gray-600">Mindestens eine Kontaktmöglichkeit (E-Mail oder Telefonnummer) ist erforderlich.</p>
+        </form>
 
         <!-- Bestellung abschließen -->
         <div class="mt-6">
