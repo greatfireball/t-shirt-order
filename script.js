@@ -39,6 +39,7 @@ const products = {
             Weiß: 0,
             Blau: 1,
         },
+        namePrice: 3.50, // Aufpreis für Name
         image: "https://via.placeholder.com/150?text=Mütze",
     },
 };
@@ -136,6 +137,7 @@ function addToCart() {
         const name = nameInput.value.trim();
         if (name) {
             options += `, Name: ${name}`;
+            price += productData.namePrice; // Name-Aufpreis hinzufügen
         }
     } else {
         const size = sizeSelect.value;
@@ -185,3 +187,4 @@ finalizeOrderButton.addEventListener("click", finalizeOrder);
 
 // Initiale Details laden
 updateProductDetails();
+
