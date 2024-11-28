@@ -209,6 +209,7 @@ function finalizeOrder() {
 }
 
 // Bestellung per E-Mail senden
+// Bestellung per E-Mail senden
 function sendEmail() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -226,7 +227,6 @@ function sendEmail() {
 
     // Betreff und Empfänger
     const to = "elternbeirat@foersterfrank.de";
-    const subject = encodeURIComponent("Neue Bestellung");
     const cc = email ? `?cc=${encodeURIComponent(email)}` : "";
 
     // Nachrichtentext
@@ -236,10 +236,61 @@ function sendEmail() {
     if (phone) body += `Telefon: ${phone}\n\n`;
 
     body += "Warenkorb:\n";
+    const cartJSON = [];
+
     cartItems.forEach((item, index) => {
-        body += `${index + 1}. ${item.product} (${item.options}) - ${item.quantity} Stück - ${item.price.toFixed(2)} €\n`;
+        // Optionen generieren
+        let options = item.options;
+
+        // Freitext-Größe bei XL zu options hinzufügen
+        if (item.options.includes("XL")) {
+            const sizeComment = document.getElementById("sizeComment").value.trim();
+            if (sizeComment) {
+                options += `, Kommentar: ${sizeComment}`;
+            }
+        }
+
+        // Textbeschreibung des Artikels
+        let itemDetails = `${index + 1}. ${item.product} (${options}) - ${item.quantity} Stück - ${item.price.toFixed(2)} €`;
+
+        // Zur Nachricht hinzufügen
+        body += `${itemDetails}\n`;
+
+        // JSON-Daten speichern
+        cartJSON.push({
+            product: item.product,
+            options: options,
+            quantity: item.quantity,
+            price: item.price,
+        });
     });
-    body += `\nGesamtkosten: ${totalPrice.toFixed(2)} €\n\nVielen Dank für Ihre Bestellung!`;
+
+    // JSON-Repräsentation mit Kontaktdaten
+    const fullJSON = {
+        customer: {
+            name: name,
+            email: email || null,
+            phone: phone || null,
+        },
+        cart: cartJSON,
+        total: totalPrice.toFixed(2),
+    };
+
+    const jsonstring = JSON.stringify(fullJSON); // Kompakt, ohne Pretty-Print
+    const shorthash = getShortHash(jsonstring);
+    const qrCodeUrl = `https://www.paypal.me/username/${totalPrice.toFixed(2)}`;
+
+    body += `\nGesamtkosten: ${totalPrice.toFixed(2)} €\n\n`;
+    body += `Den Gesamtbetrag von ${totalPrice.toFixed(2)} € bitte an den Elternbeirat der Grundschule Winzenhohl überweisen. Dazu folgende Kontoinformationen verwenden:\n\n`;
+    body += `Kontoinhaber: Elternbeirat der Grundschule Winzenhohl\nIBAN: DE73 7955 0000 0011 6739 10\nBIC: BYLADEM1ASA\nBetreff: Bestellung ${shorthash} ${name}\nBetrag: ${totalPrice.toFixed(2)} €\n\n`;
+    body += `Alternative Bezahlung per PayPal über den Link ${qrCodeUrl}\n`;
+    body += `\nVielen Dank für Ihre Bestellung!\n\n`;
+
+    // JSON-Repräsentation zur E-Mail hinzufügen (kompakt, nicht pretty-printed)
+    body += "JSON-Repräsentation des Warenkorbs:\n";
+    body += jsonstring;
+
+    const subject = encodeURIComponent(`Neue Bestellung (${shorthash}) für ${name}`);
 
     // mailto-Link generieren
     const mailtoLink = `mailto:${to}${cc}&subject=${subject}&body=${encodeURIComponent(body)}`;
@@ -247,6 +298,19 @@ function sendEmail() {
     // Link öffnen
     window.location.href = mailtoLink;
 }
+
+// Funktion, um MD5-Hash der JSON-Repräsentation zu berechnen
+function getShortHash(jsonData) {
+    // MD5-Hash generieren
+    const hash = CryptoJS.MD5(jsonData).toString();
+
+    // Erste 8 Zeichen zurückgeben
+    return hash.substring(0, 8);
+}
+
+// Event-Listener hinzufügen
+document.getElementById("sendEmail").addEventListener("click", sendEmail);
+
 
 // Aktualisierung des aktuellen Preises basierend auf der Auswahl
 function updateCurrentPrice() {
