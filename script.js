@@ -40,7 +40,7 @@ const products = {
             Blau: 1,
         },
         namePrice: 3.50, // Aufpreis für Name
-        image: "https://via.placeholder.com/150?text=Mütze",
+        image: "muetze.jpeg",
     },
 };
 
@@ -219,6 +219,57 @@ function sendEmail() {
     // Link öffnen
     window.location.href = mailtoLink;
 }
+
+// Aktualisierung des aktuellen Preises basierend auf der Auswahl
+function updateCurrentPrice() {
+    const selectedProduct = productType.value;
+    const productData = products[selectedProduct];
+
+    let currentPrice = productData.basePrice;
+
+    // Farbpreis hinzufügen
+    const color = colorSelect.value;
+    if (productData.colors[color]) {
+        currentPrice += productData.colors[color];
+    }
+
+    // Größenpreis hinzufügen (wenn nicht Mütze)
+    if (selectedProduct !== "cap") {
+        const size = sizeSelect.value;
+        if (productData.sizes[size]) {
+            currentPrice += productData.sizes[size];
+        }
+    }
+
+    // Aufpreis für Name (nur Mütze)
+    if (selectedProduct === "cap") {
+        const name = nameInput.value.trim();
+        if (name) {
+            currentPrice += productData.namePrice;
+        }
+    }
+
+    // Menge berücksichtigen
+    const quantity = parseInt(document.getElementById("quantity").value, 10) || 1;
+    currentPrice *= quantity;
+
+    // Aktuellen Preis anzeigen
+    document.getElementById("currentPrice").textContent = currentPrice.toFixed(2);
+}
+
+// Event-Listener für dynamische Preisaktualisierung
+productType.addEventListener("change", () => {
+    updateProductDetails();
+    updateCurrentPrice();
+});
+
+colorSelect.addEventListener("change", updateCurrentPrice);
+sizeSelect.addEventListener("change", updateCurrentPrice);
+nameInput.addEventListener("input", updateCurrentPrice);
+document.getElementById("quantity").addEventListener("input", updateCurrentPrice);
+
+// Initialen Preis laden
+updateCurrentPrice();
 
 // Event-Listener hinzufügen
 document.getElementById("sendEmail").addEventListener("click", sendEmail);
