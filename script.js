@@ -52,6 +52,7 @@ const products = {
 const productType = document.getElementById("productType");
 const colorSelect = document.getElementById("color");
 const sizeSelect = document.getElementById("size");
+const sizeComment = document.getElementById("sizeComment");
 const nameInput = document.getElementById("nameInput");
 const nameSection = document.getElementById("nameSection");
 const sizeSection = document.getElementById("sizeSection");
@@ -107,6 +108,21 @@ function updateProductDetails() {
     }
 }
 
+// Freitext-Größenkommentar anzeigen/verstecken
+function toggleSizeComment() {
+    const selectedProduct = productType.value;
+    const selectedSize = sizeSelect.value;
+    const sizeCommentSection = document.getElementById("sizeCommentSection");
+
+    // Kommentarfeld nur für T-Shirts und Pullover anzeigen, wenn XL ausgewählt ist
+    if ((selectedProduct === "tshirt" || selectedProduct === "pullover") && selectedSize === "Sonstiges") {
+        sizeCommentSection.classList.remove("hidden");
+    } else {
+        sizeCommentSection.classList.add("hidden");
+        document.getElementById("sizeComment").value = ""; // Kommentar zurücksetzen
+    }
+}
+
 // Warenkorb aktualisieren
 function updateCart() {
     cart.innerHTML = "";
@@ -145,7 +161,15 @@ function addToCart() {
         }
     } else {
         const size = sizeSelect.value;
-        options += `, Größe: ${size}`;
+        // Freitext-Größenkommentar in die Warenkorbdetails aufnehmen
+        if (size === "Sonstiges") {
+            const sizeCommentval = sizeComment.value.trim();
+            if (sizeCommentval) {
+                options += `, Sondergröße: ${sizeCommentval}`;
+            }
+        } else {
+            options += `, Größe: ${size}`;
+        }
         price += productData.sizes[size];
     }
 
@@ -261,10 +285,17 @@ function updateCurrentPrice() {
     document.getElementById("currentPrice").textContent = currentPrice.toFixed(2);
 }
 
+// Event-Listener für Größenänderungen
+sizeSelect.addEventListener("change", () => {
+    toggleSizeComment();
+    updateCurrentPrice(); // Preis aktualisieren, falls nötig
+});
+
 // Event-Listener für dynamische Preisaktualisierung
 productType.addEventListener("change", () => {
     updateProductDetails();
     updateCurrentPrice();
+    toggleSizeComment();
 });
 
 colorSelect.addEventListener("change", updateCurrentPrice);
