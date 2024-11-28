@@ -64,6 +64,7 @@ const addToCartButton = document.getElementById("addToCart");
 const finalizeOrderButton = document.getElementById("finalizeOrder");
 const paymentInfo = document.getElementById("paymentInfo");
 const qrCodeCanvas = document.getElementById("qrCode");
+const paypalname = "elternbeirathoebahn";
 
 // Warenkorb-Logik
 let cartItems = [];
@@ -202,7 +203,7 @@ function finalizeOrder() {
     paymentInfo.classList.remove("hidden");
 
     // QR-Code generieren
-    const qrCodeUrl = `https://www.paypal.me/username/${totalPrice.toFixed(2)}`;
+    const qrCodeUrl = `https://www.paypal.me/${paypalname}/${totalPrice.toFixed(2)}`;
     QRCode.toCanvas(qrCodeCanvas, qrCodeUrl, (error) => {
         if (error) console.error(error);
     });
@@ -284,7 +285,7 @@ function sendEmail() {
 
     const jsonstring = JSON.stringify(fullJSON); // Kompakt, ohne Pretty-Print
     const shorthash = getShortHash(jsonstring);
-    const qrCodeUrl = `https://www.paypal.me/username/${totalPrice.toFixed(2)}`;
+    const qrCodeUrl = `https://www.paypal.me/${paypalname}/${totalPrice.toFixed(2)}`;
 
     body += `\nGesamtkosten: ${totalPrice.toFixed(2)} €\n\n`;
     body += `Den Gesamtbetrag von ${totalPrice.toFixed(2)} € bitte an den Elternbeirat der Grundschule Winzenhohl überweisen. Dazu folgende Kontoinformationen verwenden:\n\n`;
