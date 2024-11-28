@@ -214,8 +214,10 @@ function sendEmail() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
+    const klassenname = document.getElementById("klasse").value.trim();
+    const kidsname = document.getElementById("kidsname").value.trim();
 
-    if (!name || (!email && !phone)) {
+    if (!name || !email || !klassenname || !kidsname) {
         alert("Bitte füllen Sie alle notwendigen Felder aus.");
         return;
     }
@@ -232,6 +234,8 @@ function sendEmail() {
     // Nachrichtentext
     let body = `Neue Bestellung von ${name}:\n\n`;
 
+    if (kidsname) body += `Kind: ${kidsname}\n`;
+    if (klassenname) body += `Klasse: ${klassenname}\n`;
     if (email) body += `E-Mail: ${email}\n`;
     if (phone) body += `Telefon: ${phone}\n\n`;
 
@@ -269,6 +273,8 @@ function sendEmail() {
     const fullJSON = {
         customer: {
             name: name,
+            kid: kidsname,
+            klasse: klassenname,
             email: email || null,
             phone: phone || null,
         },
